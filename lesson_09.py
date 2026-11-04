@@ -248,22 +248,22 @@ def run_agent(user_message):
         )
 
     # 4. Prepare current message
-current_message = user_message
+    current_message = user_message
 
-if tool_context:
-    current_message += (
-        "\n\nRelevant information:\n"
-        + tool_context
-    )
+    if tool_context:
+        current_message += (
+            "\n\nRelevant information:\n"
+            + tool_context
+        )
 
-# Keep the full context for the current LLM request,
-# but store only the original user question in history.
-        conversation_history.append({
-            "role": "user",
-            "content": user_message
-        })
+    # Keep the full context for the current LLM request,
+    # but store only the original user question in history.
+    conversation_history.append({
+        "role": "user",
+        "content": user_message
+    })
 
-        save_history()
+    save_history()
 
     # 5. Send conversation history to LLM
     messages = [
