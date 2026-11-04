@@ -1,0 +1,20 @@
+Company Name: Evomorf
+
+Refund Policy:
+Customers can request a refund within 7 days
+of purchasing a product.
+
+Refund requests must include the original
+order ID and payment receipt.
+
+Technical Support:
+Technical support is available Monday to Friday,
+from 9 AM to 6 PM.
+
+Account Management:
+Customers can update their email address
+from their account settings.
+
+Password Reset:
+Users can reset their password using
+the Forgot Password option on the login page.
