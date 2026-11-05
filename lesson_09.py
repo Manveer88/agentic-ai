@@ -345,58 +345,60 @@ def run_agent(user_message):
 
 
 
-while True:
+if __name__ == "__main__":
 
-    question = input("\nYou: ")
+    while True:
 
-    if question.lower() in ["exit", "quit"]:
-        break
+        question = input("\nYou: ")
 
-    if question.lower() == "reset":
-        conversation_history.clear()
-        save_history()
+        if question.lower() in ["exit", "quit"]:
+            break
 
-        print("\n[Memory] Conversation history cleared.")
+        if question.lower() == "reset":
+            conversation_history.clear()
+            save_history()
 
-        continue
+            print("\n[Memory] Conversation history cleared.")
 
-    if question.lower() == "memory":
-        print(json.dumps(load_important_memory(), indent=4))
-        continue
+            continue
 
-    if question.lower().startswith("remember "):
+        if question.lower() == "memory":
+            print(json.dumps(load_important_memory(), indent=4))
+            continue
 
-        fact = question[9:]
+        if question.lower().startswith("remember "):
 
-        if "=" in fact:
-            key, value = fact.split("=", 1)
+            fact = question[9:]
 
-            remember_fact(
-                key.strip(),
-                value.strip()
-            )
-        else:
-            print("Use: remember key=value")
+            if "=" in fact:
+                key, value = fact.split("=", 1)
 
-        continue
+                remember_fact(
+                    key.strip(),
+                    value.strip()
+                )
+            else:
+                print("Use: remember key=value")
 
-    if question.lower().startswith("forget "):
+            continue
 
-        key = question[7:].strip()
+        if question.lower().startswith("forget "):
 
-        forget_fact(key)
-        continue
+            key = question[7:].strip()
 
-    if question.strip():
-        try:
-            run_agent(question)
+            forget_fact(key)
+            continue
 
-        except Exception as error:
-            print("Error:", error)
+        if question.strip():
+            try:
+                run_agent(question)
+
+            except Exception as error:
+                print("Error:", error)
 
 
-print("Agent tools registered:")
-for tool_name in tools:
-    print("-", tool_name)
+    print("Agent tools registered:")
+    for tool_name in tools:
+        print("-", tool_name)
 
 
