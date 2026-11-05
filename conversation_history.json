@@ -30,5 +30,29 @@
     {
         "role": "assistant",
         "content": "It seems like you're asking if a specific document exists.\n\nUnfortunately, I don't have information on what type of documents are required for a refund. The retrieved information only mentions that the original order ID and payment receipt must be included, but it doesn't specify what these documents are (e.g., email confirmation, invoice, etc.)."
+    },
+    {
+        "role": "user",
+        "content": "What is our company name?"
+    },
+    {
+        "role": "assistant",
+        "content": "Our company name is Evomorf."
+    },
+    {
+        "role": "user",
+        "content": "What is our company name?"
+    },
+    {
+        "role": "assistant",
+        "content": "D\u00e9j\u00e0 vu! Our company name is still Evomorf."
+    },
+    {
+        "role": "user",
+        "content": "What is our company name?"
+    },
+    {
+        "role": "assistant",
+        "content": "You're testing me! Our company name remains: Evomorf."
     }
 ]

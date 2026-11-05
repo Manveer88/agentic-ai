@@ -10,8 +10,6 @@ HISTORY_FILE = os.path.join(BASE_DIR, "conversation_history.json")
 
 
 MEMORY_FILE = os.path.join(BASE_DIR, "important_memory.json")
-
-
 def load_important_memory():
 
     if not os.path.exists(MEMORY_FILE):
@@ -19,7 +17,9 @@ def load_important_memory():
 
     try:
         with open(MEMORY_FILE, "r") as file:
-            return json.load(file)
+            data = json.load(file)
+
+        return data if isinstance(data, dict) else {}
 
     except (json.JSONDecodeError, OSError):
         return {}
@@ -29,6 +29,30 @@ def save_important_memory(memory):
 
     with open(MEMORY_FILE, "w") as file:
         json.dump(memory, file, indent=4)
+
+
+def remember_fact(key, value):
+
+    memory = load_important_memory()
+
+    memory[key] = value
+
+    save_important_memory(memory)
+
+    print(f"[Memory] Saved: {key} = {value}")
+
+
+def forget_fact(key):
+
+    memory = load_important_memory()
+
+    if key in memory:
+        del memory[key]
+        save_important_memory(memory)
+        print(f"[Memory] Removed: {key}")
+    else:
+        print("[Memory] Fact not found.")
+
 
 # Load conversation history
 def load_history():
@@ -247,6 +271,13 @@ def run_agent(user_message):
             f"\nCURRENT DATE AND TIME:\n{current_time}"
         )
 
+    important_memory = load_important_memory()
+
+    memory_context = json.dumps(
+        important_memory,
+        indent=2
+    )
+
     # 4. Prepare current message
     current_message = user_message
 
@@ -268,18 +299,23 @@ def run_agent(user_message):
     # 5. Send conversation history to LLM
     messages = [
         {
-            "role": "system",
-            "content": """
-            You are a company knowledge assistant.
+    "role": "system",
+    "content": f"""
+    You are a helpful company AI assistant.
 
-            Remember previous conversation messages.
+    Use conversation history to understand follow-up questions.
 
-            Use retrieved company information to answer
-            company-policy questions.
+    Use long-term memory to answer questions about
+    previously saved facts.
 
-            Never invent company policies.
-            """
-        }
+    SAVED LONG-TERM MEMORY:
+    {memory_context}
+
+    Use retrieved company documents for company policies.
+
+    Never invent company information.
+    """
+}
     ]
 
     messages.extend(get_recent_history(10))
@@ -322,6 +358,33 @@ while True:
 
         print("\n[Memory] Conversation history cleared.")
 
+        continue
+
+    if question.lower() == "memory":
+        print(json.dumps(load_important_memory(), indent=4))
+        continue
+
+    if question.lower().startswith("remember "):
+
+        fact = question[9:]
+
+        if "=" in fact:
+            key, value = fact.split("=", 1)
+
+            remember_fact(
+                key.strip(),
+                value.strip()
+            )
+        else:
+            print("Use: remember key=value")
+
+        continue
+
+    if question.lower().startswith("forget "):
+
+        key = question[7:].strip()
+
+        forget_fact(key)
         continue
 
     if question.strip():
